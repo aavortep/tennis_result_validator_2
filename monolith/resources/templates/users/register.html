@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block title %}Register - Tennis Tournament{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-6 offset-md-3">
+        <div class="card">
+            <div class="card-header">
+                <h4>Register</h4>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="first_name" class="form-label">First Name</label>
+                            <input type="text" class="form-control" id="first_name" name="first_name" value="{{ form.first_name }}">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="last_name" class="form-label">Last Name</label>
+                            <input type="text" class="form-control" id="last_name" name="last_name" value="{{ form.last_name }}">
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Username *</label>
+                        <input type="text" class="form-control" id="username" name="username" value="{{ form.username }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email *</label>
+                        <input type="email" class="form-control" id="email" name="email" value="{{ form.email }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="role" class="form-label">Role *</label>
+                        <select class="form-select" id="role" name="role" required>
+                            <option value="SPECTATOR">Spectator</option>
+                            <option value="PLAYER">Player</option>
+                            <option value="REFEREE">Referee</option>
+                            <option value="ORGANIZER">Organizer</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password1" class="form-label">Password *</label>
+                        <input type="password" class="form-control" id="password1" name="password1" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password2" class="form-label">Confirm Password *</label>
+                        <input type="password" class="form-control" id="password2" name="password2" required>
+                    </div>
+                    <button type="submit" class="btn btn-success">Register</button>
+                    <a href="{% url 'login' %}" class="btn btn-link">Already have an account?</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
