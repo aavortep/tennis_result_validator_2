@@ -3,7 +3,6 @@ from shared.exceptions import PermissionDeniedError, ValidationError
 from apps.users.user_service import UserService
 from .user import User
 from .helpers import to_user_dto
-from users.user_dto import UserDTO
 
 
 class UserServiceImpl(UserService):

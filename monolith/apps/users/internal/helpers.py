@@ -1,4 +1,4 @@
-from users.user_dto import UserDTO
+from apps.users.user_dto import UserDTO
 
 def to_user_dto(user):
     return UserDTO(
