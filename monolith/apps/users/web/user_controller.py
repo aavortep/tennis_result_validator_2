@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from apps.users.internal.user import User
-from apps.users.internal.permissions import IsOrganizer
+from shared.permissions import IsOrganizer
 from apps.users.internal.serializers import (
     LoginSerializer,
     PasswordChangeSerializer,
