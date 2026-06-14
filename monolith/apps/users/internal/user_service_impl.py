@@ -1,6 +1,7 @@
 from django.contrib.auth import login, logout
 from shared.exceptions import PermissionDeniedError, ValidationError
 from apps.users.user_service import UserService
+from apps.users.web.roles import Role
 from .user import User
 from .helpers import to_user_dto
 
@@ -19,7 +20,7 @@ class UserServiceImpl(UserService):
             password=data["password"],
             first_name=data.get("first_name", ""),
             last_name=data.get("last_name", ""),
-            role=data.get("role", User.Role.SPECTATOR),
+            role=data.get("role", Role.SPECTATOR),
             phone=data.get("phone", ""),
             bio=data.get("bio", ""),
         )
@@ -71,23 +72,23 @@ class UserServiceImpl(UserService):
         return [to_user_dto(user) for user in users]
 
     def get_all_players():
-        users = User.objects.filter(role=User.Role.PLAYER, is_active=True)
+        users = User.objects.filter(role=Role.PLAYER, is_active=True)
         return [to_user_dto(user) for user in users]
 
     def get_player(player_id):
         try:
-            user = User.objects.get(id=player_id, role=User.Role.PLAYER)
+            user = User.objects.get(id=player_id, role=Role.PLAYER)
             return to_user_dto(user)
         except User.DoesNotExist:
             return None
 
     def get_all_referees():
-        users = User.objects.filter(role=User.Role.REFEREE, is_active=True)
+        users = User.objects.filter(role=Role.REFEREE, is_active=True)
         return [to_user_dto(user) for user in users]
     
     def get_referee(referee_id):
         try:
-            user = User.objects.get(id=referee_id, role=User.Role.REFEREE)
+            user = User.objects.get(id=referee_id, role=Role.REFEREE)
             return to_user_dto(user)
         except User.DoesNotExist:
             return None

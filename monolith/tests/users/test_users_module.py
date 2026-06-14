@@ -4,6 +4,7 @@ Tests for accounts services.
 
 from django.test import RequestFactory, TestCase
 
+from apps.users.web.roles import Role
 from apps.users.internal.user import User
 from apps.users.internal.user_service_impl import UserServiceImpl
 from shared.exceptions import PermissionDeniedError, ValidationError
@@ -23,13 +24,13 @@ class UserServiceTest(TestCase):
             "password": "securepass123",
             "first_name": "New",
             "last_name": "User",
-            "role": User.Role.PLAYER,
+            "role": Role.PLAYER,
         }
         user = UserServiceImpl.register_user(data)
 
         self.assertEqual(user.username, "newuser")
         self.assertEqual(user.email, "new@example.com")
-        self.assertEqual(user.role, User.Role.PLAYER)
+        self.assertEqual(user.role, Role.PLAYER)
         self.assertTrue(user.check_password("securepass123"))
 
     def test_register_duplicate_username(self):
@@ -119,13 +120,13 @@ class UserServiceTest(TestCase):
             username="organizer",
             email="org@example.com",
             password="pass123",
-            role=User.Role.ORGANIZER,
+            role=Role.ORGANIZER,
         )
         player = User.objects.create_user(
             username="player",
             email="player@example.com",
             password="pass123",
-            role=User.Role.PLAYER,
+            role=Role.PLAYER,
         )
         player_id = player.id
 
@@ -139,13 +140,13 @@ class UserServiceTest(TestCase):
             username="player1",
             email="p1@example.com",
             password="pass123",
-            role=User.Role.PLAYER,
+            role=Role.PLAYER,
         )
         player2 = User.objects.create_user(
             username="player2",
             email="p2@example.com",
             password="pass123",
-            role=User.Role.PLAYER,
+            role=Role.PLAYER,
         )
 
         with self.assertRaises(PermissionDeniedError):
@@ -157,26 +158,26 @@ class UserServiceTest(TestCase):
             username="player1",
             email="p1@example.com",
             password="pass",
-            role=User.Role.PLAYER,
+            role=Role.PLAYER,
         )
         User.objects.create_user(
             username="player2",
             email="p2@example.com",
             password="pass",
-            role=User.Role.PLAYER,
+            role=Role.PLAYER,
         )
         User.objects.create_user(
             username="referee",
             email="ref@example.com",
             password="pass",
-            role=User.Role.REFEREE,
+            role=Role.REFEREE,
         )
 
         players = UserServiceImpl.get_all_players()
 
         self.assertEqual(len(players), 2)
         for player in players:
-            self.assertEqual(player.role, User.Role.PLAYER)
+            self.assertEqual(player.role, Role.PLAYER)
 
     def test_get_all_referees(self):
         """Test getting all referees."""
@@ -184,17 +185,17 @@ class UserServiceTest(TestCase):
             username="ref1",
             email="r1@example.com",
             password="pass",
-            role=User.Role.REFEREE,
+            role=Role.REFEREE,
         )
         User.objects.create_user(
             username="ref2",
             email="r2@example.com",
             password="pass",
-            role=User.Role.REFEREE,
+            role=Role.REFEREE,
         )
 
         referees = UserServiceImpl.get_all_referees()
 
         self.assertEqual(len(referees), 2)
         for ref in referees:
-            self.assertEqual(ref.role, User.Role.REFEREE)
+            self.assertEqual(ref.role, Role.REFEREE)

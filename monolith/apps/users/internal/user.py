@@ -1,14 +1,10 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
+from apps.users.web.roles import Role
+
 
 class User(AbstractUser):
-    class Role(models.TextChoices):
-        ORGANIZER = "ORGANIZER", "Organizer"
-        REFEREE = "REFEREE", "Referee"
-        PLAYER = "PLAYER", "Player"
-        SPECTATOR = "SPECTATOR", "Spectator"
-
     role = models.CharField(
         max_length=20,
         choices=Role.choices,
@@ -26,16 +22,16 @@ class User(AbstractUser):
 
     @property
     def is_organizer(self):
-        return self.role == self.Role.ORGANIZER
+        return self.role == Role.ORGANIZER
 
     @property
     def is_referee(self):
-        return self.role == self.Role.REFEREE
+        return self.role == Role.REFEREE
 
     @property
     def is_player(self):
-        return self.role == self.Role.PLAYER
+        return self.role == Role.PLAYER
 
     @property
     def is_spectator(self):
-        return self.role == self.Role.SPECTATOR
+        return self.role == Role.SPECTATOR
