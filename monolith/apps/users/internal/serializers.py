@@ -104,9 +104,3 @@ class PasswordChangeSerializer(serializers.Serializer):
                 {"new_password_confirm": "New passwords don't match."}
             )
         return attrs
-
-
-class UserPublicSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ["id", "username", "first_name", "last_name", "role"]

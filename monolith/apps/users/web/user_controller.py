@@ -8,11 +8,11 @@ from apps.users.internal.permissions import IsOrganizer
 from apps.users.internal.serializers import (
     LoginSerializer,
     PasswordChangeSerializer,
-    UserPublicSerializer,
     UserRegistrationSerializer,
     UserSerializer,
     UserUpdateSerializer,
 )
+from .public_serializers import UserPublicSerializer
 from apps.users.user_service import UserService
 
 
