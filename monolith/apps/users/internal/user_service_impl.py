@@ -24,7 +24,7 @@ class UserServiceImpl(UserService):
             phone=data.get("phone", ""),
             bio=data.get("bio", ""),
         )
-        return user
+        return to_user_dto(user)
 
     def login_user(request, user):
         login(request, user)
@@ -42,7 +42,7 @@ class UserServiceImpl(UserService):
             ):
                 setattr(user, field, value)
         user.save()
-        return user
+        return to_user_dto(user)
 
     def change_password(user, old_password, new_password):
         if not user.check_password(old_password):

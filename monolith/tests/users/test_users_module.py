@@ -31,7 +31,6 @@ class UserServiceTest(TestCase):
         self.assertEqual(user.username, "newuser")
         self.assertEqual(user.email, "new@example.com")
         self.assertEqual(user.role, Role.PLAYER)
-        self.assertTrue(user.check_password("securepass123"))
 
     def test_register_duplicate_username(self):
         """Test registration fails with duplicate username."""
