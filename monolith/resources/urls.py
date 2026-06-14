@@ -1,6 +1,5 @@
 from django.conf import settings
 from django.conf.urls.static import static
-from django.contrib import admin
 from django.shortcuts import render
 from django.urls import include, path
 
@@ -13,7 +12,6 @@ def home(request):
 
 urlpatterns = [
     path("", home, name="home"),
-    path("admin/", admin.site.urls),
     path("api/accounts/", include("apps.users.api")),
     path("login/", accounts_views.login_view, name="login"),
     path("logout/", accounts_views.logout_view, name="logout"),
