@@ -59,6 +59,13 @@ class UserServiceImpl(UserService):
         users = User.objects.filter(is_active=True)
         return [to_user_dto(user) for user in users]
 
+    def get_user(user_id):
+        try:
+            user = User.objects.get(id=user_id, is_active=True)
+            return to_user_dto(user)
+        except User.DoesNotExist:
+            return None
+
     def get_users_by_role(role):
         users = User.objects.filter(role=role, is_active=True)
         return [to_user_dto(user) for user in users]
@@ -67,6 +74,20 @@ class UserServiceImpl(UserService):
         users = User.objects.filter(role=User.Role.PLAYER, is_active=True)
         return [to_user_dto(user) for user in users]
 
+    def get_player(player_id):
+        try:
+            user = User.objects.get(id=player_id, role=User.Role.PLAYER)
+            return to_user_dto(user)
+        except User.DoesNotExist:
+            return None
+
     def get_all_referees():
         users = User.objects.filter(role=User.Role.REFEREE, is_active=True)
         return [to_user_dto(user) for user in users]
+    
+    def get_referee(referee_id):
+        try:
+            user = User.objects.get(id=referee_id, role=User.Role.REFEREE)
+            return to_user_dto(user)
+        except User.DoesNotExist:
+            return None

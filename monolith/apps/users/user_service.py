@@ -31,6 +31,10 @@ class UserService(ABC):
         pass
 
     @abstractmethod
+    def get_user(user_id):
+        pass
+
+    @abstractmethod
     def get_users_by_role(role):
         pass
 
@@ -39,5 +43,13 @@ class UserService(ABC):
         pass
 
     @abstractmethod
+    def get_player(player_id):
+        pass
+
+    @abstractmethod
     def get_all_referees():
+        pass
+
+    @abstractmethod
+    def get_referee(referee_id):
         pass
