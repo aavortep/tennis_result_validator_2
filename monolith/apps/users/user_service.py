@@ -1,55 +1,106 @@
-from abc import ABC, abstractmethod
+from django.contrib.auth import login, logout
+from shared.exceptions import PermissionDeniedError, ValidationError
+from apps.users.web.roles import Role
+from .internal.user import User
+from .internal.helpers import to_user_dto
 
 
-class UserService(ABC):
-    @abstractmethod
+class UserService:
+    @staticmethod
     def register_user(data):
-        pass
+        if User.objects.filter(username=data["username"]).exists():
+            raise ValidationError("Username already exists.")
 
-    @abstractmethod
+        if User.objects.filter(email=data["email"]).exists():
+            raise ValidationError("Email already exists.")
+
+        user = User.objects.create_user(
+            username=data["username"],
+            email=data["email"],
+            password=data["password"],
+            first_name=data.get("first_name", ""),
+            last_name=data.get("last_name", ""),
+            role=data.get("role", Role.SPECTATOR),
+            phone=data.get("phone", ""),
+            bio=data.get("bio", ""),
+        )
+        return to_user_dto(user)
+
+    @staticmethod
     def login_user(request, user):
-        pass
+        login(request, user)
 
-    @abstractmethod
+    @staticmethod
     def logout_user(request):
-        pass
+        logout(request)
 
-    @abstractmethod
+    @staticmethod
     def update_profile(user, data):
-        pass
+        for field, value in data.items():
+            if hasattr(user, field) and field not in (
+                "password",
+                "role",
+                "is_staff",
+                "is_superuser",
+            ):
+                setattr(user, field, value)
+        user.save()
+        return to_user_dto(user)
 
-    @abstractmethod
+    @staticmethod
     def change_password(user, old_password, new_password):
-        pass
+        if not user.check_password(old_password):
+            raise ValidationError("Current password is incorrect.")
+        user.set_password(new_password)
+        user.save()
 
-    @abstractmethod
+    @staticmethod
     def delete_account(user, requesting_user):
-        pass
+        if user.id != requesting_user.id and not requesting_user.is_organizer:
+            raise PermissionDeniedError("You can only delete your own account.")
 
-    @abstractmethod
+        user.delete()
+
+    @staticmethod
     def get_all_users():
-        pass
+        users = User.objects.filter(is_active=True)
+        return [to_user_dto(user) for user in users]
 
-    @abstractmethod
+    @staticmethod
     def get_user(user_id):
-        pass
+        try:
+            user = User.objects.get(id=user_id, is_active=True)
+            return to_user_dto(user)
+        except User.DoesNotExist:
+            return None
 
-    @abstractmethod
+    @staticmethod
     def get_users_by_role(role):
-        pass
+        users = User.objects.filter(role=role, is_active=True)
+        return [to_user_dto(user) for user in users]
 
-    @abstractmethod
+    @staticmethod
     def get_all_players():
-        pass
+        users = User.objects.filter(role=Role.PLAYER, is_active=True)
+        return [to_user_dto(user) for user in users]
 
-    @abstractmethod
+    @staticmethod
     def get_player(player_id):
-        pass
+        try:
+            user = User.objects.get(id=player_id, role=Role.PLAYER)
+            return to_user_dto(user)
+        except User.DoesNotExist:
+            return None
 
-    @abstractmethod
+    @staticmethod
     def get_all_referees():
-        pass
-
-    @abstractmethod
+        users = User.objects.filter(role=Role.REFEREE, is_active=True)
+        return [to_user_dto(user) for user in users]
+    
+    @staticmethod
     def get_referee(referee_id):
-        pass
+        try:
+            user = User.objects.get(id=referee_id, role=Role.REFEREE)
+            return to_user_dto(user)
+        except User.DoesNotExist:
+            return None

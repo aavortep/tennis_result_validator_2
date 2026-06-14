@@ -6,7 +6,7 @@ from django.test import RequestFactory, TestCase
 
 from apps.users.web.roles import Role
 from apps.users.internal.user import User
-from apps.users.internal.user_service_impl import UserServiceImpl
+from apps.users.user_service import UserService
 from shared.exceptions import PermissionDeniedError, ValidationError
 
 
@@ -26,7 +26,7 @@ class UserServiceTest(TestCase):
             "last_name": "User",
             "role": Role.PLAYER,
         }
-        user = UserServiceImpl.register_user(data)
+        user = UserService.register_user(data)
 
         self.assertEqual(user.username, "newuser")
         self.assertEqual(user.email, "new@example.com")
@@ -45,7 +45,7 @@ class UserServiceTest(TestCase):
         }
 
         with self.assertRaises(ValidationError):
-            UserServiceImpl.register_user(data)
+            UserService.register_user(data)
 
     def test_register_duplicate_email(self):
         """Test registration fails with duplicate email."""
@@ -60,7 +60,7 @@ class UserServiceTest(TestCase):
         }
 
         with self.assertRaises(ValidationError):
-            UserServiceImpl.register_user(data)
+            UserService.register_user(data)
 
     def test_update_profile(self):
         """Test profile update."""
@@ -68,7 +68,7 @@ class UserServiceTest(TestCase):
             username="testuser", email="test@example.com", password="pass123"
         )
 
-        updated = UserServiceImpl.update_profile(
+        updated = UserService.update_profile(
             user,
             {
                 "first_name": "Updated",
@@ -87,7 +87,7 @@ class UserServiceTest(TestCase):
             username="testuser", email="test@example.com", password="oldpass123"
         )
 
-        UserServiceImpl.change_password(user, "oldpass123", "newpass456")
+        UserService.change_password(user, "oldpass123", "newpass456")
         user.refresh_from_db()
 
         self.assertTrue(user.check_password("newpass456"))
@@ -100,7 +100,7 @@ class UserServiceTest(TestCase):
         )
 
         with self.assertRaises(ValidationError):
-            UserServiceImpl.change_password(user, "wrongpass", "newpass456")
+            UserService.change_password(user, "wrongpass", "newpass456")
 
     def test_delete_own_account(self):
         """Test deleting own account."""
@@ -109,7 +109,7 @@ class UserServiceTest(TestCase):
         )
         user_id = user.id
 
-        UserServiceImpl.delete_account(user, user)
+        UserService.delete_account(user, user)
 
         self.assertFalse(User.objects.filter(id=user_id).exists())
 
@@ -129,7 +129,7 @@ class UserServiceTest(TestCase):
         )
         player_id = player.id
 
-        UserServiceImpl.delete_account(player, organizer)
+        UserService.delete_account(player, organizer)
 
         self.assertFalse(User.objects.filter(id=player_id).exists())
 
@@ -149,7 +149,7 @@ class UserServiceTest(TestCase):
         )
 
         with self.assertRaises(PermissionDeniedError):
-            UserServiceImpl.delete_account(player1, player2)
+            UserService.delete_account(player1, player2)
 
     def test_get_all_players(self):
         """Test getting all players."""
@@ -172,7 +172,7 @@ class UserServiceTest(TestCase):
             role=Role.REFEREE,
         )
 
-        players = UserServiceImpl.get_all_players()
+        players = UserService.get_all_players()
 
         self.assertEqual(len(players), 2)
         for player in players:
@@ -193,7 +193,7 @@ class UserServiceTest(TestCase):
             role=Role.REFEREE,
         )
 
-        referees = UserServiceImpl.get_all_referees()
+        referees = UserService.get_all_referees()
 
         self.assertEqual(len(referees), 2)
         for ref in referees:
