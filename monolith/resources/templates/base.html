@@ -20,17 +20,17 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="">Tournaments</a>
+                        <a class="nav-link" href="{% url 'tournament_list' %}">Tournaments</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="">Rankings</a>
+                        <a class="nav-link" href="{% url 'global_rankings' %}">Rankings</a>
                     </li>
                     {% if user.is_authenticated %}
                     <li class="nav-item">
-                        <a class="nav-link" href="">My Matches</a>
+                        <a class="nav-link" href="{% url 'my_matches' %}">My Matches</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="">Disputes</a>
+                        <a class="nav-link" href="{% url 'dispute_list' %}">Disputes</a>
                     </li>
                     {% endif %}
                 </ul>

@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %}{% if tournament %}Edit{% else %}Create{% endif %} Tournament - Tennis Tournament{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <div class="card">
+            <div class="card-header">
+                <h4>{% if tournament %}Edit{% else %}Create{% endif %} Tournament</h4>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Name *</label>
+                        <input type="text" class="form-control" id="name" name="name" value="{{ tournament.name }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description</label>
+                        <textarea class="form-control" id="description" name="description" rows="3">{{ tournament.description }}</textarea>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="start_date" class="form-label">Start Date *</label>
+                            <input type="date" class="form-control" id="start_date" name="start_date" value="{{ tournament.start_date|date:'Y-m-d' }}" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="end_date" class="form-label">End Date *</label>
+                            <input type="date" class="form-control" id="end_date" name="end_date" value="{{ tournament.end_date|date:'Y-m-d' }}" required>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="location" class="form-label">Location *</label>
+                        <input type="text" class="form-control" id="location" name="location" value="{{ tournament.location }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="max_players" class="form-label">Max Players</label>
+                        <input type="number" class="form-control" id="max_players" name="max_players" value="{{ tournament.max_players|default:32 }}" min="2" max="256">
+                    </div>
+                    <button type="submit" class="btn btn-success">{% if tournament %}Update{% else %}Create{% endif %}</button>
+                    <a href="{% url 'tournament_list' %}" class="btn btn-outline-secondary">Cancel</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

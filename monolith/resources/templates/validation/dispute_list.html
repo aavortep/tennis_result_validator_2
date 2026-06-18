@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block title %}Disputes - Tennis Tournament{% endblock %}
+
+{% block content %}
+<h2>Disputes</h2>
+
+<div class="mb-3">
+    <form method="get" class="row g-3">
+        <div class="col-auto">
+            <select name="status" class="form-select">
+                <option value="">All Statuses</option>
+                <option value="OPEN" {% if request.GET.status == 'OPEN' %}selected{% endif %}>Open</option>
+                <option value="UNDER_REVIEW" {% if request.GET.status == 'UNDER_REVIEW' %}selected{% endif %}>Under Review</option>
+                <option value="RESOLVED" {% if request.GET.status == 'RESOLVED' %}selected{% endif %}>Resolved</option>
+            </select>
+        </div>
+        <div class="col-auto">
+            <button type="submit" class="btn btn-outline-secondary">Filter</button>
+        </div>
+    </form>
+</div>
+
+<table class="table mt-4">
+    <thead>
+        <tr>
+            <th>Match</th>
+            <th>Raised By</th>
+            <th>Reason</th>
+            <th>Status</th>
+            <th>Created</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for dispute in disputes %}
+        <tr>
+            <td>{{ dispute.match.player1.username }} vs {{ dispute.match.player2.username }}</td>
+            <td>{{ dispute.raised_by.username }}</td>
+            <td>{{ dispute.reason|truncatewords:10 }}</td>
+            <td>
+                <span class="badge bg-{% if dispute.status == 'RESOLVED' %}success{% elif dispute.status == 'UNDER_REVIEW' %}warning{% else %}danger{% endif %}">
+                    {{ dispute.status }}
+                </span>
+            </td>
+            <td>{{ dispute.created_at|date:"M d, Y" }}</td>
+            <td>
+                <a href="{% url 'dispute_detail' dispute.id %}" class="btn btn-outline-success btn-sm">View</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="6" class="text-muted">No disputes found.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block title %}{% if match %}Edit{% else %}Create{% endif %} Match - Tennis Tournament{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <div class="card">
+            <div class="card-header">
+                <h4>{% if match %}Edit{% else %}Create{% endif %} Match</h4>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="player1" class="form-label">Player 1</label>
+                            <select class="form-select" id="player1" name="player1">
+                                <option value="">-- Select Player --</option>
+                                {% for player in players %}
+                                <option value="{{ player.id }}" {% if match and match.player1 == player %}selected{% endif %}>{{ player.username }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="player2" class="form-label">Player 2</label>
+                            <select class="form-select" id="player2" name="player2">
+                                <option value="">-- Select Player --</option>
+                                {% for player in players %}
+                                <option value="{{ player.id }}" {% if match and match.player2 == player %}selected{% endif %}>{{ player.username }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="referee" class="form-label">Referee</label>
+                        <select class="form-select" id="referee" name="referee">
+                            <option value="">-- Select Referee --</option>
+                            {% for referee in referees %}
+                            <option value="{{ referee.id }}" {% if match and match.referee == referee %}selected{% endif %}>{{ referee.username }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="round" class="form-label">Round</label>
+                            <select class="form-select" id="round" name="round">
+                                <option value="R128" {% if match and match.round == 'R128' %}selected{% endif %}>Round of 128</option>
+                                <option value="R64" {% if match and match.round == 'R64' %}selected{% endif %}>Round of 64</option>
+                                <option value="R32" {% if match and match.round == 'R32' %}selected{% endif %}>Round of 32</option>
+                                <option value="R16" {% if match and match.round == 'R16' %}selected{% endif %}>Round of 16</option>
+                                <option value="QF" {% if match and match.round == 'QF' %}selected{% endif %}>Quarter Finals</option>
+                                <option value="SF" {% if match and match.round == 'SF' %}selected{% endif %}>Semi Finals</option>
+                                <option value="F" {% if match and match.round == 'F' %}selected{% endif %}>Final</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="court" class="form-label">Court</label>
+                            <input type="text" class="form-control" id="court" name="court" value="{{ match.court }}">
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="scheduled_time" class="form-label">Scheduled Time</label>
+                        <input type="datetime-local" class="form-control" id="scheduled_time" name="scheduled_time" value="{{ match.scheduled_time|date:'Y-m-d\TH:i' }}">
+                    </div>
+                    <button type="submit" class="btn btn-success">{% if match %}Update{% else %}Create{% endif %}</button>
+                    <a href="{% url 'tournament_detail' tournament.id %}" class="btn btn-outline-secondary">Cancel</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
