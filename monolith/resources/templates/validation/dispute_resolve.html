@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block title %}Resolve Dispute - Tennis Tournament{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <div class="card">
+            <div class="card-header">
+                <h4>Resolve Dispute</h4>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-info">
+                    <strong>Match:</strong> {{ dispute.match.player1.username }} vs {{ dispute.match.player2.username }}<br>
+                    <strong>Raised By:</strong> {{ dispute.raised_by.username }}<br>
+                    <strong>Reason:</strong> {{ dispute.reason }}
+                </div>
+                <form method="post">
+                    {% csrf_token %}
+                    {% if scores %}
+                    <div class="mb-3">
+                        <label for="final_score_id" class="form-label">Select Final Score</label>
+                        <select class="form-select" id="final_score_id" name="final_score_id">
+                            <option value="">-- None --</option>
+                            {% for score in scores %}
+                            <option value="{{ score.id }}">
+                                {{ score.submitted_by.username }}: 
+                                {% for set in score.set_scores %}{{ set.player1 }}-{{ set.player2 }}{% if not forloop.last %}, {% endif %}{% endfor %}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    {% endif %}
+                    <div class="mb-3">
+                        <label for="resolution_notes" class="form-label">Resolution Notes *</label>
+                        <textarea class="form-control" id="resolution_notes" name="resolution_notes" rows="5" required placeholder="Explain the resolution decision..."></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-success">Resolve Dispute</button>
+                    <a href="{% url 'dispute_detail' dispute.id %}" class="btn btn-outline-secondary">Cancel</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

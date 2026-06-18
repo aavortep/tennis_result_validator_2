@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block title %}Submit Score - Tennis Tournament{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <div class="card">
+            <div class="card-header">
+                <h4>Submit Score</h4>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-info">
+                    <strong>Match:</strong> {{ match.player1.username }} vs {{ match.player2.username }}
+                </div>
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Set</th>
+                                    <th>{{ match.player1.username }}</th>
+                                    <th>{{ match.player2.username }}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for i in "12345" %}
+                                <tr>
+                                    <td>Set {{ i }}</td>
+                                    <td>
+                                        <input type="number" class="form-control" name="set{{ i }}_player1" min="0" max="7">
+                                    </td>
+                                    <td>
+                                        <input type="number" class="form-control" name="set{{ i }}_player2" min="0" max="7">
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <p class="text-muted">Only fill in sets that were played. Leave empty sets blank.</p>
+                    <button type="submit" class="btn btn-success">Submit Score</button>
+                    <a href="{% url 'match_detail' match.id %}" class="btn btn-outline-secondary">Cancel</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

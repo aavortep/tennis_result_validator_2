@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block title %}My Matches - Tennis Tournament{% endblock %}
+
+{% block content %}
+<h2>My Matches</h2>
+
+<table class="table mt-4">
+    <thead>
+        <tr>
+            <th>Tournament</th>
+            <th>Round</th>
+            <th>Player 1</th>
+            <th>Player 2</th>
+            <th>Referee</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for match in matches %}
+        <tr>
+            <td>{{ match.tournament.name }}</td>
+            <td>{{ match.round }}</td>
+            <td>{{ match.player1.username|default:"-" }}</td>
+            <td>{{ match.player2.username|default:"-" }}</td>
+            <td>{{ match.referee.username|default:"-" }}</td>
+            <td>
+                <span class="badge bg-{% if match.status == 'COMPLETED' %}success{% elif match.status == 'IN_PROGRESS' %}primary{% elif match.status == 'DISPUTED' %}danger{% else %}secondary{% endif %}">
+                    {{ match.status }}
+                </span>
+            </td>
+            <td>
+                <a href="{% url 'match_detail' match.id %}" class="btn btn-outline-success btn-sm">View</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="7" class="text-muted">No matches found.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ tournament.name }} Rankings - Tennis Tournament{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>{{ tournament.name }} Rankings</h2>
+    <a href="{% url 'tournament_detail' tournament.id %}" class="btn btn-outline-success">Back to Tournament</a>
+</div>
+
+<table class="table mt-4">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Player</th>
+            <th>Points</th>
+            <th>Wins</th>
+            <th>Losses</th>
+            <th>Sets Won</th>
+            <th>Sets Lost</th>
+            <th>Games Won</th>
+            <th>Games Lost</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for ranking in rankings %}
+        <tr>
+            <td>{{ ranking.position }}</td>
+            <td>{{ ranking.player.username }}</td>
+            <td><strong>{{ ranking.points }}</strong></td>
+            <td>{{ ranking.wins }}</td>
+            <td>{{ ranking.losses }}</td>
+            <td>{{ ranking.sets_won }}</td>
+            <td>{{ ranking.sets_lost }}</td>
+            <td>{{ ranking.games_won }}</td>
+            <td>{{ ranking.games_lost }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="9" class="text-muted">No rankings available yet.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
