@@ -33,9 +33,9 @@
                         <h5 class="card-title">Get Started</h5>
                         <p class="card-text">Register or login to participate.</p>
                         {% if user.is_authenticated %}
-                        <a href="" class="btn btn-success">My Profile</a>
+                        <a href="{% url 'profile' %}" class="btn btn-success">My Profile</a>
                         {% else %}
-                        <a href="" class="btn btn-success">Register</a>
+                        <a href="{% url 'register' %}" class="btn btn-success">Register</a>
                         {% endif %}
                     </div>
                 </div>
