@@ -16,5 +16,5 @@ urlpatterns = [
     path("players/", user_controller.PlayerListView.as_view(), name="player-list"),
     path("referees/", user_controller.RefereeListView.as_view(), name="referee-list"),
     path("users/", user_controller.UserListView.as_view(), name="user-list"),
-    path("users/<int:pk>/", user_controller.UserView.as_view(), name="match-detail"),
+    path("users/<int:pk>/", user_controller.UserDetailView.as_view(), name="user-detail"),
 ]
