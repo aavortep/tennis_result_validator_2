@@ -117,3 +117,8 @@ class UserListView(generics.ListAPIView):
 
     def get_queryset(self):
         return UserService.get_all_users()
+
+class UserView(generics.RetrieveAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserPublicSerializer
+    permission_classes = [IsAuthenticated]

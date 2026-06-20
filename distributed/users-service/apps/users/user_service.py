@@ -68,13 +68,10 @@ class UserService:
         return [to_user_dto(user) for user in users]
 
     @staticmethod
-    def get_user(user_id, dto=True):
+    def get_user(user_id):
         try:
             user = User.objects.get(id=user_id, is_active=True)
-            if dto:
-                return to_user_dto(user)
-            else:
-                return user
+            return to_user_dto(user)
         except User.DoesNotExist:
             return None
 
