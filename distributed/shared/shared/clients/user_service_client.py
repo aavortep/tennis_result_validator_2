@@ -4,7 +4,7 @@ from ..dto.user_dto import UserDTO
 
 class UserServiceClient:
 
-    BASE_URL = "http://user-service:8000"
+    BASE_URL = "http://users-service:8000"
 
     @classmethod
     def get_user(cls, user_id: int):
