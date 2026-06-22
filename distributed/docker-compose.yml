@@ -31,50 +31,50 @@ services:
       postgres:
         condition: service_healthy
 
-  # tournaments-service:
-  #   build:
-  #     context: .
-  #     dockerfile: tournaments-service/Dockerfile
-  #   container_name: tournaments-service
-  #   volumes:
-  #     - ./tournaments-service:/app
-  #   ports:
-  #     - "8001:8000"
-  #   env_file:
-  #     - .env
-  #   depends_on:
-  #     postgres:
-  #       condition: service_healthy
+  tournaments-service:
+    build:
+      context: .
+      dockerfile: tournaments-service/Dockerfile
+    container_name: tournaments-service
+    volumes:
+      - ./tournaments-service:/app
+    ports:
+      - "8001:8000"
+    env_file:
+      - .env
+    depends_on:
+      postgres:
+        condition: service_healthy
 
-  # results-service:
-  #   build:
-  #     context: .
-  #     dockerfile: results-service/Dockerfile
-  #   container_name: results-service
-  #   volumes:
-  #     - ./results-service:/app
-  #   ports:
-  #     - "8002:8000"
-  #   env_file:
-  #     - .env
-  #   depends_on:
-  #     postgres:
-  #       condition: service_healthy
+  results-service:
+    build:
+      context: .
+      dockerfile: results-service/Dockerfile
+    container_name: results-service
+    volumes:
+      - ./results-service:/app
+    ports:
+      - "8002:8000"
+    env_file:
+      - .env
+    depends_on:
+      postgres:
+        condition: service_healthy
 
-  # publication-service:
-  #   build:
-  #     context: .
-  #     dockerfile: publication-service/Dockerfile
-  #   container_name: publication-service
-  #   volumes:
-  #     - ./publication-service:/app
-  #   ports:
-  #     - "8003:8000"
-  #   env_file:
-  #     - .env
-  #   depends_on:
-  #     postgres:
-  #       condition: service_healthy
+  publication-service:
+    build:
+      context: .
+      dockerfile: publication-service/Dockerfile
+    container_name: publication-service
+    volumes:
+      - ./publication-service:/app
+    ports:
+      - "8003:8000"
+    env_file:
+      - .env
+    depends_on:
+      postgres:
+        condition: service_healthy
 
 volumes:
   postgres_data:
