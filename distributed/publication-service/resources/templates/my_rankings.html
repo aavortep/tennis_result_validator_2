@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+{% block title %}My Rankings - Tennis Tournament{% endblock %}
+
+{% block content %}
+<h2>My Rankings</h2>
+
+{% if global_ranking %}
+<div class="card mb-4">
+    <div class="card-header">
+        <h5>Global Ranking</h5>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="text-center">
+                    <h1 class="display-4">#{{ global_ranking.position }}</h1>
+                    <p class="text-muted">Position</p>
+                </div>
+            </div>
+            <div class="col-md-9">
+                <div class="row">
+                    <div class="col-md-4">
+                        <p><strong>Total Points:</strong> {{ global_ranking.total_points }}</p>
+                    </div>
+                    <div class="col-md-4">
+                        <p><strong>Total Wins:</strong> {{ global_ranking.total_wins }}</p>
+                    </div>
+                    <div class="col-md-4">
+                        <p><strong>Total Losses:</strong> {{ global_ranking.total_losses }}</p>
+                    </div>
+                    <div class="col-md-4">
+                        <p><strong>Tournaments Played:</strong> {{ global_ranking.tournaments_played }}</p>
+                    </div>
+                    <div class="col-md-4">
+                        <p><strong>Tournaments Won:</strong> {{ global_ranking.tournaments_won }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% else %}
+<div class="alert alert-info">You don't have a global ranking yet. Participate in tournaments to earn points!</div>
+{% endif %}
+
+<h4>Tournament Rankings</h4>
+<table class="table mt-4">
+    <thead>
+        <tr>
+            <th>Tournament</th>
+            <th>Position</th>
+            <th>Points</th>
+            <th>Wins</th>
+            <th>Losses</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for ranking in tournament_rankings %}
+        <tr>
+            <td>{{ ranking.tournament.name }}</td>
+            <td>#{{ ranking.position }}</td>
+            <td>{{ ranking.points }}</td>
+            <td>{{ ranking.wins }}</td>
+            <td>{{ ranking.losses }}</td>
+            <td>
+                <a href="{% url 'tournament_rankings' ranking.tournament.id %}" class="btn btn-outline-success btn-sm">View Full Rankings</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="6" class="text-muted">No tournament rankings yet.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
