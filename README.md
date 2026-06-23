@@ -1,5 +1,11 @@
 # Tennis result validator
 
+## Team
+
+- Anna Petrova 910345
+- Yerulan Zhagyparov 908771
+- Sapargali Zhaksylyk 908570
+
 ## Introduction
 
 The project's aim is to develop a system for digitalizing and verifying the process of recording, approving and publishing tennis match results.
