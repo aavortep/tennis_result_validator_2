@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %}Global Rankings - Tennis Tournament{% endblock %}
+
+{% block content %}
+<h2>Global Rankings</h2>
+
+<table class="table mt-4">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Player</th>
+            <th>Points</th>
+            <th>Wins</th>
+            <th>Losses</th>
+            <th>Tournaments Played</th>
+            <th>Tournaments Won</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for ranking in rankings %}
+        <tr>
+            <td>{{ ranking.position }}</td>
+            <td>{{ ranking.player.username }}</td>
+            <td><strong>{{ ranking.total_points }}</strong></td>
+            <td>{{ ranking.total_wins }}</td>
+            <td>{{ ranking.total_losses }}</td>
+            <td>{{ ranking.tournaments_played }}</td>
+            <td>{{ ranking.tournaments_won }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="7" class="text-muted">No rankings available yet.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
