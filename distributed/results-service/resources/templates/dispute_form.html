@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %}Create Dispute - Tennis Tournament{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <div class="card">
+            <div class="card-header">
+                <h4>Raise Dispute</h4>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-info">
+                    <strong>Match:</strong> {{ match.player1.username }} vs {{ match.player2.username }}
+                </div>
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="reason" class="form-label">Reason for Dispute *</label>
+                        <textarea class="form-control" id="reason" name="reason" rows="5" required placeholder="Please describe the reason for this dispute in detail..."></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-danger">Raise Dispute</button>
+                    <a href="{% url 'match_detail' match.id %}" class="btn btn-outline-secondary">Cancel</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

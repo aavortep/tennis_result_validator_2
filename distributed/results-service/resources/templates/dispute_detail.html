@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+
+{% block title %}Dispute Details - Tennis Tournament{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <div class="card mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h4 class="mb-0">Dispute Details</h4>
+                <span class="badge bg-{% if dispute.status == 'RESOLVED' %}success{% elif dispute.status == 'UNDER_REVIEW' %}warning{% else %}danger{% endif %} fs-6">
+                    {{ dispute.status }}
+                </span>
+            </div>
+            <div class="card-body">
+                <p><strong>Match:</strong> <a href="{% url 'match_detail' dispute.match.id %}">{{ dispute.match.player1.username }} vs {{ dispute.match.player2.username }}</a></p>
+                <p><strong>Raised By:</strong> {{ dispute.raised_by.username }}</p>
+                <p><strong>Created:</strong> {{ dispute.created_at }}</p>
+                <hr>
+                <h5>Reason</h5>
+                <p>{{ dispute.reason }}</p>
+
+                {% if dispute.status == 'RESOLVED' %}
+                <hr>
+                <h5>Resolution</h5>
+                <p><strong>Resolved By:</strong> {{ dispute.resolved_by.username }}</p>
+                <p><strong>Resolved At:</strong> {{ dispute.resolved_at }}</p>
+                <p>{{ dispute.resolution_notes }}</p>
+                {% endif %}
+            </div>
+            {% if user.is_authenticated and dispute.status != 'RESOLVED' and user.role in 'ORGANIZER,REFEREE' %}
+            <div class="card-footer">
+                <a href="{% url 'dispute_resolve' dispute.id %}" class="btn btn-success">Resolve Dispute</a>
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <span>Evidence</span>
+            </div>
+            <div class="card-body">
+                {% if evidence %}
+                {% for item in evidence %}
+                <div class="card mb-2">
+                    <div class="card-body">
+                        <p><strong>{{ item.submitted_by.username }}</strong> - {{ item.created_at }}</p>
+                        <p>{{ item.description }}</p>
+                        {% if item.file %}
+                        <a href="{{ item.file.url }}" class="btn btn-outline-primary btn-sm" target="_blank">View File</a>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+                {% else %}
+                <p class="text-muted">No evidence submitted yet.</p>
+                {% endif %}
+
+                {% if user.is_authenticated and dispute.status != 'RESOLVED' %}
+                <hr>
+                <h5>Add Evidence</h5>
+                <form method="post" action="{% url 'evidence_add' dispute.id %}" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description *</label>
+                        <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="file" class="form-label">File (optional)</label>
+                        <input type="file" class="form-control" id="file" name="file">
+                    </div>
+                    <button type="submit" class="btn btn-success">Add Evidence</button>
+                </form>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">Quick Actions</div>
+            <div class="card-body">
+                <a href="{% url 'match_detail' dispute.match.id %}" class="btn btn-outline-success w-100 mb-2">View Match</a>
+                <a href="{% url 'dispute_list' %}" class="btn btn-outline-secondary w-100">Back to Disputes</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
